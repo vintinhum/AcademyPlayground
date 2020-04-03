@@ -79,18 +79,35 @@ class MainScreenViewController : UIViewController {
 }
 
 class RitmoScreenOneViewController: UIViewController {
-    let labelRitmo2 = UILabel()
+    
     
     override func loadView() {
         let view = UIView()
         view.backgroundColor = .white
         
         let botaoRetornarImage = UIImage(named: "BotaoRetornar.png")
+        let botaoProximoImage = UIImage(named: "BotaoProximo.png")
+        let botaoJogarImage = UIImage(named: "BotaoJogar.png")
         
         let botaoRetornar = UIButton()
         botaoRetornar.frame = CGRect(x: 30, y: 30, width: 126, height: 126)
         botaoRetornar.setImage(botaoRetornarImage, for: .normal)
         botaoRetornar.addTarget(nil, action: #selector(tapButton), for: .touchUpInside)
+        
+        let botaoProximo = UIButton()
+        botaoProximo.frame = CGRect(x: 598.985, y: 472.5, width: 168.03, height: 79)
+        botaoProximo.setImage(botaoProximoImage, for: .normal)
+        botaoProximo.addTarget(nil, action: #selector(tapBotaoProximo), for: .touchUpInside)
+        botaoProximo.isHidden = true
+        
+        let botaoJogar = UIButton()
+        botaoJogar.frame = CGRect(x: 598.985, y: 472.5, width: 168.03, height: 79)
+        botaoJogar.setImage(botaoJogarImage, for: .normal)
+        botaoJogar.addTarget(nil, action: #selector(tapBotaoJogar), for: .touchUpInside)
+        
+        let screenButton = UIButton()
+        screenButton.frame = CGRect(x: 0, y: 0, width: 1366, height: 1024)
+        screenButton.addTarget(nil, action: #selector(tapScreen), for: .touchUpInside)
         
         let ritmoTitleLabel = UILabel()
         ritmoTitleLabel.frame = CGRect(x: 533, y: 30, width: 300, height: 100)
@@ -115,12 +132,12 @@ class RitmoScreenOneViewController: UIViewController {
         newString1.append(regularText2)
         newString1.append(boldText2)
         
-        let boldText3 = NSAttributedString(string: "ritmo.", attributes: boldAttribute)
+        
         let regularText3 = NSAttributedString(string: "Quando contamos de 1 até 4, sempre seguimos um ", attributes: regularAttribute)
-        let regularText4 = NSAttributedString(string: " Vamos tentar? Sempre que um número mudar de cor, toque na tela!", attributes: regularAttribute)
+        let regularText4 = NSAttributedString(string: " Vamos tentar? Os números irão mudar de cor dentro de um ritmo. Sempre que um número mudar de cor, toque na tela!", attributes: regularAttribute)
         let newString2 = NSMutableAttributedString()
         newString2.append(regularText3)
-        newString2.append(boldText3)
+        newString2.append(boldText2)
         newString2.append(regularText4)
         
         let labelRitmo1 = UILabel(frame: CGRect(x: 183, y: 100, width: 1000, height: 200))
@@ -128,17 +145,14 @@ class RitmoScreenOneViewController: UIViewController {
         labelRitmo1.numberOfLines = 3
         labelRitmo1.textAlignment = .center
         
-        
-        labelRitmo2.frame = CGRect(x: 183, y: 250, width: 1000, height: 150)
+        let labelRitmo2 = UILabel()
+        labelRitmo2.frame = CGRect(x: 183, y: 250, width: 1000, height: 200)
         labelRitmo2.attributedText = newString2
-        labelRitmo2.numberOfLines = 2
+        labelRitmo2.numberOfLines = 3
         labelRitmo2.textAlignment = .center
-        labelRitmo2.text = "adsad"
-//        labelRitmo2.isHidden = false
+        labelRitmo2.isHidden = false
         
-        let screenButton = UIButton()
-        screenButton.frame = CGRect(x: 0, y: 156, width: 1366, height: 868)
-        screenButton.addTarget(nil, action: #selector(tapScreen), for: .touchUpInside)
+        
         
         
         let backgroundImage = UIImageView()
@@ -146,13 +160,37 @@ class RitmoScreenOneViewController: UIViewController {
         backgroundImage.frame = CGRect(x: 0, y: 420, width: 1366, height: 603.5)
         backgroundImage.image = UIImage(imageLiteralResourceName: "Background.png")
         
+        let card1 = UIImageView()
+        card1.contentMode = .scaleToFill
+        card1.frame = CGRect(x: 183, y: 650, width: 215, height: 215)
+        card1.image = UIImage(imageLiteralResourceName: "card1.png")
+        let card2 = UIImageView()
+        card2.contentMode = .scaleToFill
+        card2.frame = CGRect(x: 444.66, y: 650, width: 215, height: 215)
+        card2.image = UIImage(imageLiteralResourceName: "card2.png")
+        let card3 = UIImageView()
+        card3.contentMode = .scaleToFill
+        card3.frame = CGRect(x: 706.32, y: 650, width: 215, height: 215)
+        card3.image = UIImage(imageLiteralResourceName: "card3.png")
+        let card4 = UIImageView()
+        card4.contentMode = .scaleToFill
+        card4.frame = CGRect(x: 968, y: 650, width: 215, height: 215)
+        card4.image = UIImage(imageLiteralResourceName: "card4.png")
+        
+        
+        
         view.addSubview(backgroundImage)
         view.addSubview(screenButton)
         view.addSubview(botaoRetornar)
         view.addSubview(ritmoTitleLabel)
         view.addSubview(labelRitmo1)
         view.addSubview(labelRitmo2)
-        
+        view.addSubview(card1)
+        view.addSubview(card2)
+        view.addSubview(card3)
+        view.addSubview(card4)
+        view.addSubview(botaoProximo)
+        view.addSubview(botaoJogar)
         
         self.view = view
         
@@ -165,15 +203,15 @@ class RitmoScreenOneViewController: UIViewController {
         
     }
     @objc func tapScreen() {
-//        print("Tocou na tela")
-//        if (labelRitmo2.isHidden == true){
-//
-//            labelRitmo2.isHidden = false
-//        }
-//        else {
-//            print("Label está visível")
-//        }
+        print("Tocou na tela")
         
+        
+    }
+    @objc func tapBotaoProximo() {
+        print("Clicou em 'Próximo'")
+    }
+    @objc func tapBotaoJogar() {
+        print("Clicou em 'Jogar'")
     }
 }
 // Present the view controller in the Live View window
