@@ -98,12 +98,13 @@ class RitmoScreenOneViewController: UIViewController {
         botaoProximo.frame = CGRect(x: 598.985, y: 472.5, width: 168.03, height: 79)
         botaoProximo.setImage(botaoProximoImage, for: .normal)
         botaoProximo.addTarget(nil, action: #selector(tapBotaoProximo), for: .touchUpInside)
-        botaoProximo.isHidden = true
+        botaoProximo.isHidden = false
         
         let botaoJogar = UIButton()
         botaoJogar.frame = CGRect(x: 598.985, y: 472.5, width: 168.03, height: 79)
         botaoJogar.setImage(botaoJogarImage, for: .normal)
         botaoJogar.addTarget(nil, action: #selector(tapBotaoJogar), for: .touchUpInside)
+        botaoJogar.isHidden = true
         
         let screenButton = UIButton()
         screenButton.frame = CGRect(x: 0, y: 0, width: 1366, height: 1024)
@@ -140,7 +141,8 @@ class RitmoScreenOneViewController: UIViewController {
         newString2.append(boldText2)
         newString2.append(regularText4)
         
-        let labelRitmo1 = UILabel(frame: CGRect(x: 183, y: 100, width: 1000, height: 200))
+        let labelRitmo1 = UILabel()
+        labelRitmo1.frame = CGRect(x: 183, y: 100, width: 1000, height: 200)
         labelRitmo1.attributedText = newString1
         labelRitmo1.numberOfLines = 3
         labelRitmo1.textAlignment = .center
@@ -164,18 +166,22 @@ class RitmoScreenOneViewController: UIViewController {
         card1.contentMode = .scaleToFill
         card1.frame = CGRect(x: 183, y: 650, width: 215, height: 215)
         card1.image = UIImage(imageLiteralResourceName: "card1.png")
+        //card1.isHidden = true
         let card2 = UIImageView()
         card2.contentMode = .scaleToFill
         card2.frame = CGRect(x: 444.66, y: 650, width: 215, height: 215)
         card2.image = UIImage(imageLiteralResourceName: "card2.png")
+        //card2.isHidden = true
         let card3 = UIImageView()
         card3.contentMode = .scaleToFill
         card3.frame = CGRect(x: 706.32, y: 650, width: 215, height: 215)
         card3.image = UIImage(imageLiteralResourceName: "card3.png")
+        //card3.isHidden = true
         let card4 = UIImageView()
         card4.contentMode = .scaleToFill
         card4.frame = CGRect(x: 968, y: 650, width: 215, height: 215)
         card4.image = UIImage(imageLiteralResourceName: "card4.png")
+        //card4.isHidden = true
         
         
         
@@ -204,15 +210,22 @@ class RitmoScreenOneViewController: UIViewController {
     }
     @objc func tapScreen() {
         print("Tocou na tela")
+//        labelRitmo2.isHidden = false
+//        card1.isHidden = false
+//        card2.isHidden = false
+//        card3.isHidden = false
+//        card4.isHidden = false
         
         
     }
     @objc func tapBotaoProximo() {
         print("Clicou em 'Próximo'")
+        
     }
     @objc func tapBotaoJogar() {
         print("Clicou em 'Jogar'")
     }
+    
 }
 // Present the view controller in the Live View window
 
