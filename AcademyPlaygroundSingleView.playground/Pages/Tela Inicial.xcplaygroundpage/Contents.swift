@@ -2,6 +2,8 @@
 
 import UIKit
 import PlaygroundSupport
+import AVFoundation
+
 
 
 let cfURL = Bundle.main.url(forResource: "Itim-Regular", withExtension: "ttf")! as CFURL
@@ -47,7 +49,10 @@ class MainScreenViewController : UIViewController {
         jogarRitmoButton.setTitle("RITMO", for: .normal)
         jogarRitmoButton.setTitleColor(.black, for: .normal)
         jogarRitmoButton.setImage(botaoRitmo, for: .normal)
-        jogarRitmoButton.addTarget(nil, action: #selector(tapButton), for: .touchUpInside)
+        jogarRitmoButton.addTarget(nil, action: #selector(tapRitmoButton), for: .touchUpInside)
+        jogarRitmoButton.isUserInteractionEnabled = true
+        let tapRitmo = UITapGestureRecognizer(target: self, action: #selector(tapRitmoButton))
+        jogarRitmoButton.addGestureRecognizer(tapRitmo)
         
         let jogarMelodiaButton = UIButton()
         jogarMelodiaButton.frame = CGRect(x: 869, y: 200, width: 415.61, height: 445)
@@ -72,7 +77,7 @@ class MainScreenViewController : UIViewController {
         navigationController?.navigationBar.isHidden = true
     }
     
-    @objc func tapButton() {
+    @objc func tapRitmoButton(_ gesture: UIGestureRecognizer) {
         //print("Apertou botão de RITMO")
         navigationController?.pushViewController(ritmoScreenOne, animated: false)
     }
@@ -80,35 +85,102 @@ class MainScreenViewController : UIViewController {
 
 class RitmoScreenOneViewController: UIViewController {
     
+    private var audioPlayer: AVAudioPlayer?
+    
+    
+    
+    var botaoProximo: UIButton!
+    var botaoJogar: UIButton!
+    var screenButton: UIButton!
+    
+    var labelRitmo2: UILabel!
+    
+    var card1: UIImageView!
+    var card2: UIImageView!
+    var card3: UIImageView!
+    var card4: UIImageView!
+    
+    var card1azul: UIImageView!
+    var card2azul: UIImageView!
+    var card3azul: UIImageView!
+    var card4azul: UIImageView!
+    
+    var numberOfRepeats = 0
+    var count = 0
+    var timer: Timer!
+    var timerIsOn: Bool?
     
     override func loadView() {
         let view = UIView()
         view.backgroundColor = .white
         
+        
+        
+        
+        self.view = view
+        
+        navigationController?.navigationBar.isHidden = true
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        do {
+            audioPlayer = AVAudioPlayer()
+            audioPlayer = try AVAudioPlayer(contentsOf: URL.init(fileURLWithPath: Bundle.main.path(forResource: "Musikids Exercício Ritmo 1", ofType: "mp3")!))
+            audioPlayer?.prepareToPlay()
+        }
+        catch {
+            
+            print(error)
+        }
+        
+        
         let botaoRetornarImage = UIImage(named: "BotaoRetornar.png")
         let botaoProximoImage = UIImage(named: "BotaoProximo.png")
         let botaoJogarImage = UIImage(named: "BotaoJogar.png")
         
+        
+        
         let botaoRetornar = UIButton()
         botaoRetornar.frame = CGRect(x: 30, y: 30, width: 126, height: 126)
         botaoRetornar.setImage(botaoRetornarImage, for: .normal)
-        botaoRetornar.addTarget(nil, action: #selector(tapButton), for: .touchUpInside)
+        botaoRetornar.addTarget(nil, action: #selector(tapBotaoRetornar), for: .touchUpInside)
+        botaoRetornar.isUserInteractionEnabled = true
+        let tapRetornar = UITapGestureRecognizer(target: self, action: #selector(tapBotaoRetornar))
+        botaoRetornar.addGestureRecognizer(tapRetornar)
         
-        let botaoProximo = UIButton()
+        
+        
+        botaoProximo = UIButton()
         botaoProximo.frame = CGRect(x: 598.985, y: 472.5, width: 168.03, height: 79)
         botaoProximo.setImage(botaoProximoImage, for: .normal)
         botaoProximo.addTarget(nil, action: #selector(tapBotaoProximo), for: .touchUpInside)
         botaoProximo.isHidden = false
+        botaoProximo.isUserInteractionEnabled = true
+        let tapProximo = UITapGestureRecognizer(target: self, action: #selector(tapBotaoProximo))
+        botaoProximo.addGestureRecognizer(tapProximo)
         
-        let botaoJogar = UIButton()
+        
+        
+        botaoJogar = UIButton()
         botaoJogar.frame = CGRect(x: 598.985, y: 472.5, width: 168.03, height: 79)
         botaoJogar.setImage(botaoJogarImage, for: .normal)
         botaoJogar.addTarget(nil, action: #selector(tapBotaoJogar), for: .touchUpInside)
         botaoJogar.isHidden = true
+        botaoJogar.isUserInteractionEnabled = true
+        let tapJogar = UITapGestureRecognizer(target: self, action: #selector(tapBotaoJogar))
+        botaoJogar.addGestureRecognizer(tapJogar)
         
-        let screenButton = UIButton()
+        
+        
+        screenButton = UIButton()
         screenButton.frame = CGRect(x: 0, y: 0, width: 1366, height: 1024)
         screenButton.addTarget(nil, action: #selector(tapScreen), for: .touchUpInside)
+        screenButton.isUserInteractionEnabled = true
+        let tapTela = UITapGestureRecognizer(target: self, action: #selector(tapScreen))
+        screenButton.addGestureRecognizer(tapTela)
+        
+        
         
         let ritmoTitleLabel = UILabel()
         ritmoTitleLabel.frame = CGRect(x: 533, y: 30, width: 300, height: 100)
@@ -134,6 +206,7 @@ class RitmoScreenOneViewController: UIViewController {
         newString1.append(boldText2)
         
         
+        
         let regularText3 = NSAttributedString(string: "Quando contamos de 1 até 4, sempre seguimos um ", attributes: regularAttribute)
         let regularText4 = NSAttributedString(string: " Vamos tentar? Os números irão mudar de cor dentro de um ritmo. Sempre que um número mudar de cor, toque na tela!", attributes: regularAttribute)
         let newString2 = NSMutableAttributedString()
@@ -141,19 +214,22 @@ class RitmoScreenOneViewController: UIViewController {
         newString2.append(boldText2)
         newString2.append(regularText4)
         
+        
+        
         let labelRitmo1 = UILabel()
         labelRitmo1.frame = CGRect(x: 183, y: 100, width: 1000, height: 200)
         labelRitmo1.attributedText = newString1
         labelRitmo1.numberOfLines = 3
         labelRitmo1.textAlignment = .center
         
-        let labelRitmo2 = UILabel()
+        
+        
+        labelRitmo2 = UILabel()
         labelRitmo2.frame = CGRect(x: 183, y: 250, width: 1000, height: 200)
         labelRitmo2.attributedText = newString2
         labelRitmo2.numberOfLines = 3
         labelRitmo2.textAlignment = .center
-        labelRitmo2.isHidden = false
-        
+        labelRitmo2.isHidden = true
         
         
         
@@ -162,28 +238,55 @@ class RitmoScreenOneViewController: UIViewController {
         backgroundImage.frame = CGRect(x: 0, y: 420, width: 1366, height: 603.5)
         backgroundImage.image = UIImage(imageLiteralResourceName: "Background.png")
         
-        let card1 = UIImageView()
+        
+        
+        card1 = UIImageView()
         card1.contentMode = .scaleToFill
         card1.frame = CGRect(x: 183, y: 650, width: 215, height: 215)
         card1.image = UIImage(imageLiteralResourceName: "card1.png")
-        //card1.isHidden = true
-        let card2 = UIImageView()
+        card1.isHidden = true
+        
+        card1azul = UIImageView()
+        card1azul.contentMode = .scaleToFill
+        card1azul.frame = CGRect(x: 183, y: 650, width: 215, height: 215)
+        card1azul.image = UIImage(imageLiteralResourceName: "card1azul.png")
+        card1azul.isHidden = true
+        
+        card2 = UIImageView()
         card2.contentMode = .scaleToFill
         card2.frame = CGRect(x: 444.66, y: 650, width: 215, height: 215)
         card2.image = UIImage(imageLiteralResourceName: "card2.png")
-        //card2.isHidden = true
-        let card3 = UIImageView()
+        card2.isHidden = true
+        
+        card2azul = UIImageView()
+        card2azul.contentMode = .scaleToFill
+        card2azul.frame = CGRect(x: 444.66, y: 650, width: 215, height: 215)
+        card2azul.image = UIImage(imageLiteralResourceName: "card2azul.png")
+        card2azul.isHidden = true
+        
+        card3 = UIImageView()
         card3.contentMode = .scaleToFill
         card3.frame = CGRect(x: 706.32, y: 650, width: 215, height: 215)
         card3.image = UIImage(imageLiteralResourceName: "card3.png")
-        //card3.isHidden = true
-        let card4 = UIImageView()
+        card3.isHidden = true
+        
+        card3azul = UIImageView()
+        card3azul.contentMode = .scaleToFill
+        card3azul.frame = CGRect(x: 706.32, y: 650, width: 215, height: 215)
+        card3azul.image = UIImage(imageLiteralResourceName: "card3azul.png")
+        card3azul.isHidden = true
+        
+        card4 = UIImageView()
         card4.contentMode = .scaleToFill
         card4.frame = CGRect(x: 968, y: 650, width: 215, height: 215)
         card4.image = UIImage(imageLiteralResourceName: "card4.png")
-        //card4.isHidden = true
+        card4.isHidden = true
         
-        
+        card4azul = UIImageView()
+        card4azul.contentMode = .scaleToFill
+        card4azul.frame = CGRect(x: 968, y: 650, width: 215, height: 215)
+        card4azul.image = UIImage(imageLiteralResourceName: "card4azul.png")
+        card4azul.isHidden = true
         
         view.addSubview(backgroundImage)
         view.addSubview(screenButton)
@@ -192,38 +295,162 @@ class RitmoScreenOneViewController: UIViewController {
         view.addSubview(labelRitmo1)
         view.addSubview(labelRitmo2)
         view.addSubview(card1)
+        view.addSubview(card1azul)
         view.addSubview(card2)
+        view.addSubview(card2azul)
         view.addSubview(card3)
+        view.addSubview(card3azul)
         view.addSubview(card4)
+        view.addSubview(card4azul)
         view.addSubview(botaoProximo)
         view.addSubview(botaoJogar)
-        
-        self.view = view
-        
-        navigationController?.navigationBar.isHidden = true
     }
     
-    @objc func tapButton() {
-//        print("Apertou botão de RETORNO")
-    navigationController?.popToRootViewController(animated: false)
+    @objc func tapBotaoRetornar(_ gesture: UIGestureRecognizer) {
+        //        print("Apertou botão de RETORNO")
         
+        if timerIsOn == true {
+            navigationController?.popToRootViewController(animated: false)
+            labelRitmo2.isHidden = true
+            card1.isHidden = true
+            card2.isHidden = true
+            card3.isHidden = true
+            card4.isHidden = true
+            card1azul.isHidden = true
+            card2azul.isHidden = true
+            card3azul.isHidden = true
+            card4azul.isHidden = true
+            botaoProximo.isHidden = false
+            botaoJogar.isHidden = true
+            
+            timer.invalidate()
+            timer = nil
+            audioPlayer?.stop()
+        }
+            
+        else {
+            navigationController?.popToRootViewController(animated: false)
+            labelRitmo2.isHidden = true
+            card1.isHidden = true
+            card2.isHidden = true
+            card3.isHidden = true
+            card4.isHidden = true
+            card1azul.isHidden = true
+            card2azul.isHidden = true
+            card3azul.isHidden = true
+            card4azul.isHidden = true
+            botaoProximo.isHidden = false
+            botaoJogar.isHidden = true
+        }
     }
-    @objc func tapScreen() {
+    
+    
+    @objc func tapScreen(_ gesture: UIGestureRecognizer) {
         print("Tocou na tela")
-//        labelRitmo2.isHidden = false
-//        card1.isHidden = false
-//        card2.isHidden = false
-//        card3.isHidden = false
-//        card4.isHidden = false
-        
         
     }
-    @objc func tapBotaoProximo() {
+    
+    @objc func tapBotaoProximo(_ gesture: UIGestureRecognizer) {
         print("Clicou em 'Próximo'")
         
+        labelRitmo2.frame = CGRect(x: 183, y: 250, width: 1000, height: 200)
+        labelRitmo2.isHidden = false
+        labelRitmo2.textColor = .black
+        labelRitmo2.backgroundColor = .white
+        card1.isHidden = false
+        card2.isHidden = false
+        card3.isHidden = false
+        card4.isHidden = false
+        botaoProximo.isHidden = true
+        botaoJogar.isHidden = false
+        timerIsOn = false
+        
     }
-    @objc func tapBotaoJogar() {
+    
+    @objc func tapBotaoJogar(_ gesture: UIGestureRecognizer) {
         print("Clicou em 'Jogar'")
+        botaoJogar.isHidden = true
+        
+        timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(incrementCountLabel), userInfo: nil, repeats: true)
+        timerIsOn = true
+        count = 0
+        numberOfRepeats = 0
+        
+        card1azul.isHidden = true
+        card1.isHidden = false
+        
+        audioPlayer?.play()
+    }
+    
+    @objc func incrementCountLabel() {
+        
+        count += 1
+        
+        if (count == 4) {
+            
+            card1.isHidden = false
+            card1azul.isHidden = true
+            card2.isHidden = false
+            card2azul.isHidden = true
+            card3.isHidden = false
+            card3azul.isHidden = true
+            card4.isHidden = true
+            card4azul.isHidden = false
+            
+            count = 0
+            numberOfRepeats += 1
+            
+        }
+            
+        else if (count == 1) {
+            
+            card1.isHidden = true
+            card1azul.isHidden = false
+            card2.isHidden = false
+            card2azul.isHidden = true
+            card3.isHidden = false
+            card3azul.isHidden = true
+            card4.isHidden = false
+            card4azul.isHidden = true
+        }
+            
+        else if (count == 2) {
+            
+            card1.isHidden = false
+            card1azul.isHidden = true
+            card2.isHidden = true
+            card2azul.isHidden = false
+            card3.isHidden = false
+            card3azul.isHidden = true
+            card4.isHidden = false
+            card4azul.isHidden = true
+            
+        }
+            
+        else if (count == 3) {
+            
+            card1.isHidden = false
+            card1azul.isHidden = true
+            card2.isHidden = false
+            card2azul.isHidden = true
+            card3.isHidden = true
+            card3azul.isHidden = false
+            card4.isHidden = false
+            card4azul.isHidden = true
+            
+        }
+        
+        if (numberOfRepeats == 4 && count == 1) {
+            
+            timer.invalidate()
+            print("should stop now")
+            self.botaoJogar.isHidden = false
+            self.card1.isHidden = false
+            self.card1azul.isHidden = true
+            timerIsOn = false
+            audioPlayer?.stop()
+        }
+        
     }
     
 }
@@ -237,6 +464,7 @@ navigation.pushViewController(mainScreen, animated: false)
 let msvc = MainScreenViewController(screenType: .ipadPro12_9, isPortrait: false)
 msvc.preferredContentSize = CGSize(width: 1024, height: 1366)
 //PlaygroundPage.current.liveView = msvc.scale(to: 0.4)
+
 PlaygroundPage.current.liveView = navigation.scale(to: 0.4)
 
 
