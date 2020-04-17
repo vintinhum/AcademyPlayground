@@ -106,9 +106,11 @@ class RitmoScreenOneViewController: UIViewController {
     var card4azul: UIImageView!
     
     var numberOfRepeats = 0
-    var count = 0
+    var count: Double!
+    
     var timer: Timer!
     var timerIsOn: Bool?
+    var rightBeat: Bool?
     
     override func loadView() {
         let view = UIView()
@@ -326,6 +328,7 @@ class RitmoScreenOneViewController: UIViewController {
             timer.invalidate()
             timer = nil
             audioPlayer?.stop()
+            timerIsOn = false
         }
             
         else {
@@ -348,6 +351,17 @@ class RitmoScreenOneViewController: UIViewController {
     @objc func tapScreen(_ gesture: UIGestureRecognizer) {
         print("Tocou na tela")
         
+//        if (card1azul.isHidden == false || card2azul.isHidden == false || card3azul.isHidden == false || card4azul.isHidden == false) {
+//
+//            print("Tocou no tempo certo")
+//
+//        }
+//
+//        else {
+//
+//            print("Tocou errado")
+//        }
+
     }
     
     @objc func tapBotaoProximo(_ gesture: UIGestureRecognizer) {
@@ -371,7 +385,15 @@ class RitmoScreenOneViewController: UIViewController {
         print("Clicou em 'Jogar'")
         botaoJogar.isHidden = true
         
+        
+        
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(incrementCountLabel), userInfo: nil, repeats: true)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.audioPlayer?.play()
+            
+            
+        }
         timerIsOn = true
         count = 0
         numberOfRepeats = 0
@@ -379,81 +401,112 @@ class RitmoScreenOneViewController: UIViewController {
         card1azul.isHidden = true
         card1.isHidden = false
         
-        audioPlayer?.play()
+        audioPlayer?.currentTime = 0
+        
+        
     }
     
     @objc func incrementCountLabel() {
         
         count += 1
         
-        if (count == 4) {
+        switch count {
             
-            card1.isHidden = false
-            card1azul.isHidden = true
-            card2.isHidden = false
-            card2azul.isHidden = true
-            card3.isHidden = false
-            card3azul.isHidden = true
-            card4.isHidden = true
+        case 4:
+//            rightBeat = true
+//            card4.isHidden = true
             card4azul.isHidden = false
+//            card1.isHidden = false
+            card1azul.isHidden = true
+//            card2.isHidden = false
+            card2azul.isHidden = true
+//            card3.isHidden = false
+            card3azul.isHidden = true
+            
+//            print("Tempo 4")
             
             count = 0
             numberOfRepeats += 1
             
-        }
             
-        else if (count == 1) {
             
-            card1.isHidden = true
+        case 1:
+//            rightBeat = true
+//            card1.isHidden = true
             card1azul.isHidden = false
-            card2.isHidden = false
+//            card2.isHidden = false
             card2azul.isHidden = true
-            card3.isHidden = false
+//            card3.isHidden = false
             card3azul.isHidden = true
-            card4.isHidden = false
+//            card4.isHidden = false
             card4azul.isHidden = true
-        }
             
-        else if (count == 2) {
+//            print("Tempo 1")
             
-            card1.isHidden = false
+            
+        case 2:
+//            rightBeat = true
+
+//            card1.isHidden = false
             card1azul.isHidden = true
-            card2.isHidden = true
+//            card2.isHidden = true
             card2azul.isHidden = false
-            card3.isHidden = false
+//            card3.isHidden = false
             card3azul.isHidden = true
-            card4.isHidden = false
+//            card4.isHidden = false
             card4azul.isHidden = true
+//            print("Tempo 2")
             
-        }
             
-        else if (count == 3) {
             
-            card1.isHidden = false
+        case 3:
+//            rightBeat = true
+
+//            card1.isHidden = false
             card1azul.isHidden = true
-            card2.isHidden = false
+//            card2.isHidden = false
             card2azul.isHidden = true
-            card3.isHidden = true
+//            card3.isHidden = true
             card3azul.isHidden = false
-            card4.isHidden = false
+//            card4.isHidden = false
             card4azul.isHidden = true
+//            print("Tempo 3")
+        
+//        case 0.75, 1.75, 2.75, 3.75:
+//
+//            rightBeat = true
+//
+//        case 0.25, 1.25, 2.25, 3.25:
+//
+//            rightBeat = false
+//
+//        case 0.5, 1.5, 2.5, 3.5:
+//
+//            print("Contra-tempo")
+//            rightBeat = false
+            
+        default:
+             
+        ()
             
         }
         
         if (numberOfRepeats == 4 && count == 1) {
             
             timer.invalidate()
-            print("should stop now")
+            
             self.botaoJogar.isHidden = false
             self.card1.isHidden = false
             self.card1azul.isHidden = true
             timerIsOn = false
-            audioPlayer?.stop()
+            //            audioPlayer?.stop()
+            
+            
         }
-        
     }
-    
 }
+
+
 // Present the view controller in the Live View window
 
 let mainScreen = MainScreenViewController()
